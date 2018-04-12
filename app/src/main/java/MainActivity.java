@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private String[] myDataset= {"muori", "muori"};
+    private String[] myDataset= {"muori", "muori", "muori"};
 
 
     @Override
