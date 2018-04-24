@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="edit_title" type="id">new</item>
+    <item name="edit_description" type="id">description</item>
+    <item name="confrim_button" type="id">confirm</item>
+</resources>

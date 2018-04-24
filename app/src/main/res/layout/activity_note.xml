@@ -3,4 +3,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id= "@+id/titleEt"
+        android:layout_marginTop="10dp"
+        android:textSize="200dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id= "@+id/descriptionEt"
+        android:layout_marginTop="10dp"
+        android:textSize="200dp"/>
+
 </RelativeLayout>
