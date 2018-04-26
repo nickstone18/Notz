@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTv;
         public TextView descriptionTv;
-        public Button editButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -44,7 +42,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                     intent.putExtra("description", description);
                     intent.putExtra("position", getAdapterPosition());
 
-                    ((MainActivity)context).startActivityForResult(intent);
+                    ((MainActivity)context).startActivityForResult(intent, 1001);
                 }
             });
         }
@@ -55,12 +53,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         this.context = context;
     }
 
-    public void addNote(Note note){
-        mDataset.add(note);
-        notifyDataSetChanged();
-        // notifyItemInserted();
+    public void addNote(Note note) {
+        this.mDataset.add(0, note);
+        notifyItemInserted(0);
 
     }
+
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =  LayoutInflater.from(parent.getContext())
@@ -79,6 +77,26 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     }
 
     @Override
-    public int getItemCount() {return mDataset.size();
+    public int getItemCount() {
+        return mDataset.size();
+    }
+
+    public Note getNote(int index) {
+        return mDataset.get(index);
+    }
+
+
+    public void updateNote(int index,Note note){
+        mDataset.set(index,note);
+        notifyItemChanged(index);
+    }
+
+    public void updateNote(int index,String title, String description){
+
+        Note note = mDataset.get(index);
+
+        note.setTitle(title);
+        note.setDescription(description);
+        notifyItemChanged(index);
     }
 }

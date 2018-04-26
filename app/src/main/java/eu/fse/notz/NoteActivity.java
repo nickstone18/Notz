@@ -27,7 +27,7 @@ public class NoteActivity extends AppCompatActivity {
         editConfirmButton = (Button) findViewById(R.id.confrim_button);
 
         final Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
+        final String title = intent.getStringExtra("title");
         String description =  intent.getStringExtra ("description");
 
         titleEt.setText(title);
