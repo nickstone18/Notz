@@ -1,8 +1,10 @@
 package eu.fse.notz;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -83,5 +85,43 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         alertBuilder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_REQUEST) {
+
+            if (resultCode == RESULT_OK) {
+
+                //getPosition from returnIntent
+                int editedNotePosition = data.getIntExtra("position", -1);
+
+                mAdapter.updateNote(editedNotePosition,
+                        data.getStringExtra("title"),
+                        data.getStringExtra("description"));
+
+            }
+
+            if (resultCode == RESUL_REMOVE_NOTE) {
+                final int editedNotePosition = data.getIntExtra("position", -1);
+                mAdapter.removeNote(editedNotePosition);
+
+
+                Snackbar.make(mRecyclerView, getString(R.string.note_removed), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.cancel, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Note note = new Note(data.getStringExtra("title"),
+                                        data.getStringExtra("description"));
+
+                                mAdapter.addNote(editedNotePosition, note);
+                            }
+                        })
+                        .show();
+            }
+        }
     }
 }

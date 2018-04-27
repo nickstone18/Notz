@@ -19,6 +19,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     private Context context;
 
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTv;
         public TextView descriptionTv;
@@ -53,12 +55,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         this.context = context;
     }
 
-    public void addNote(Note note) {
-        this.mDataset.add(0, note);
-        notifyItemInserted(0);
-
-    }
-
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =  LayoutInflater.from(parent.getContext())
@@ -85,6 +81,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         return mDataset.get(index);
     }
 
+    public void addNote(Note note) {
+        this.mDataset.add(0, note);
+        notifyItemInserted(0);
+
+
+    }
+
+    public void addNote(int index, Note note) {
+        mDataset.add(index, note);
+        notifyItemInserted(index);
+
+    }
 
     public void updateNote(int index,Note note){
         mDataset.set(index,note);
@@ -98,5 +106,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         note.setTitle(title);
         note.setDescription(description);
         notifyItemChanged(index);
+    }
+
+    public void removeNote(int index) {
+        mDataset.remove(index);
+        notifyItemRemoved(index);
     }
 }
