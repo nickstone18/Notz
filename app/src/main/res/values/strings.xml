@@ -3,4 +3,8 @@
     <string name="dialog_positive_button">aggiungi</string>
     <string name="dialog_add_note_title">nuova nota</string>
     <string name="dialog_negative_button">cancella</string>
+    <string name="confirm">confirm</string>
+    <string name="delete">delete</string>
+    <string name="titolo_dialog">Title</string>
+    <string name="descrizione_dialog">Description</string>
 </resources>

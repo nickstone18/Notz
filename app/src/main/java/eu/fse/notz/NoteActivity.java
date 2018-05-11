@@ -2,8 +2,8 @@ package eu.fse.notz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,18 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static android.R.attr.description;
-import static eu.fse.notz.R.attr.title;
-
 /**
  * Created by Amministratore on 12/04/2018.
  */
 
 public class NoteActivity extends AppCompatActivity {
 
-    EditText titleEt;
-    EditText descriptionEt;
-    Button   editConfirmButton;
+    private EditText titleEt, descriptionEt;
+
+    Button editConfirmBtn, deleteButton;
+
+    String title,description;
+
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +32,29 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note);
         titleEt = (EditText) findViewById(R.id.edit_title);
         descriptionEt = (EditText) findViewById(R.id.edit_description);
-        editConfirmButton = (Button) findViewById(R.id.confrim_button);
+        editConfirmBtn = (Button) findViewById(R.id.edit_confirm);
+        deleteButton = (Button) findViewById(R.id.edit_delete);
+        Intent intent1 = getIntent();
 
-        final Intent intent = getIntent();
-        final String title = intent.getStringExtra("title");
-        String description =  intent.getStringExtra ("description");
+        //get values from launching intent
+        intent = getIntent();
+        title = intent.getStringExtra("title");
+        description = intent.getStringExtra("description");
+
+
+        // set values to Edittexts
 
         titleEt.setText(title);
         descriptionEt.setText(description);
 
-        editConfirmButton.setOnClickListener(new View.OnClickListener() {
+        editConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String editedTitle = titleEt.getText().toString();
                 String editedDescription = descriptionEt.getText().toString();
-                int position = intent.getIntExtra ("position", -1);
+
+
+                int position = intent.getIntExtra("position", -1);
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("title", editedTitle);
@@ -53,8 +62,8 @@ public class NoteActivity extends AppCompatActivity {
                 returnIntent.putExtra("position", position);
                 setResult(Activity.RESULT_OK, returnIntent);
 
-                finish();
 
+                finish();
             }
         });
     }
@@ -66,7 +75,6 @@ public class NoteActivity extends AppCompatActivity {
 
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -80,7 +88,7 @@ public class NoteActivity extends AppCompatActivity {
             returnIntent.putExtra("title", title);
             returnIntent.putExtra("description", description);
             returnIntent.putExtra("position", position);
-            setResult(MainActivity.RESUL_REMOVE_NOTE, returnIntent);
+            setResult(MainActivity.RESULT_REMOVE_NOTE, returnIntent);
 
             finish();
             return true;
@@ -91,7 +99,6 @@ public class NoteActivity extends AppCompatActivity {
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
