@@ -99,6 +99,13 @@ public class NotesAdapter extends RecyclerView.Adapter {
 
     }
 
+    public void addNotesList(ArrayList<Note> notes){
+
+        mDataset.addAll(notes);
+        notifyDataSetChanged();
+
+    }
+
     // Create new views (invoked by the layout manager)
 
     @Override
