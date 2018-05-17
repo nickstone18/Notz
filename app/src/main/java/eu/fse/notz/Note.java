@@ -25,6 +25,8 @@ public class Note {
 
     }
 
+    public Note(){}
+
     public Note(NoteBuilder builder) {
         this.title = builder.title;
         this.description = builder.description;
@@ -33,35 +35,6 @@ public class Note {
 
     }
 
-    public static ArrayList<Note> getNotesList(JSONArray notes) {
-        ArrayList<Note> list = new ArrayList<>();
-
-        for (int i = 0; i < notes.length(); i++) {
-
-            try {
-                JSONObject jsonNote = notes.getJSONObject(i);
-                list.add(new Note(jsonNote));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        return list;
-
-    }
-
-    public Note(JSONObject jsonNote) {
-        try {
-            title = jsonNote.getString("title");
-            description = jsonNote.getString("description");
-            id = jsonNote.getInt("id");
-
-        } catch (JSONException e) {
-            Log.e("Note", e.getMessage());
-        }
-
-    }
 
     public String getTitle() {
         return title;
@@ -127,4 +100,37 @@ public class Note {
             return this;
         }
     }
+
+
+    public static ArrayList<Note> getNotesList(JSONArray notes) {
+        ArrayList<Note> list = new ArrayList<>();
+
+        for (int i = 0; i < notes.length(); i++) {
+
+            try {
+                JSONObject jsonNote = notes.getJSONObject(i);
+                list.add(new Note(jsonNote));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return list;
+
+    }
+
+    public Note(JSONObject jsonNote) {
+        try {
+            title = jsonNote.getString("title");
+            description = jsonNote.getString("description");
+            id = jsonNote.getInt("id");
+
+        } catch (JSONException e) {
+            Log.e("Note", e.getMessage());
+        }
+
+    }
+
+
 }

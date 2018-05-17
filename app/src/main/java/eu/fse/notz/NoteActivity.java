@@ -34,7 +34,6 @@ public class NoteActivity extends AppCompatActivity {
         descriptionEt = (EditText) findViewById(R.id.edit_description);
         editConfirmBtn = (Button) findViewById(R.id.edit_confirm);
         deleteButton = (Button) findViewById(R.id.edit_delete);
-        Intent intent1 = getIntent();
 
         //get values from launching intent
         intent = getIntent();
@@ -88,7 +87,7 @@ public class NoteActivity extends AppCompatActivity {
             returnIntent.putExtra("title", title);
             returnIntent.putExtra("description", description);
             returnIntent.putExtra("position", position);
-            setResult(MainActivity.RESULT_REMOVE_NOTE, returnIntent);
+            setResult(MainActivity.RESUL_REMOVE_NOTE, returnIntent);
 
             finish();
             return true;

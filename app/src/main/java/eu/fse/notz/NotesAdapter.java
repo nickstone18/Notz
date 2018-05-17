@@ -75,13 +75,6 @@ public class NotesAdapter extends RecyclerView.Adapter {
         notifyItemChanged(index);
     }
 
-    public void updateNote(int index, String title, String description) {
-        Note note = mDataset.get(index);
-        note.setTitle(title);
-        note.setDescription(description);
-        notifyItemChanged(index);
-    }
-
     public void removeNote(int index) {
         mDataset.remove(index);
         notifyItemRemoved(index);
@@ -93,18 +86,25 @@ public class NotesAdapter extends RecyclerView.Adapter {
 
     }
 
+    public void updateNote(int index, String title, String description) {
+        Note note = mDataset.get(index);
+        note.setTitle(title);
+        note.setDescription(description);
+        notifyItemChanged(index);}
+
+        public void addNotesList(ArrayList<Note> notes){
+
+            mDataset.addAll(notes);
+            notifyDataSetChanged();
+    }
+
     public void addNote(Note note) {
         this.mDataset.add(0, note);
         notifyItemInserted(0);
 
     }
 
-    public void addNotesList(ArrayList<Note> notes){
 
-        mDataset.addAll(notes);
-        notifyDataSetChanged();
-
-    }
 
     // Create new views (invoked by the layout manager)
 

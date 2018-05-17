@@ -35,23 +35,28 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static final int EDIT_REQUEST = 1001;
-    public static final int RESULT_REMOVE_NOTE = RESULT_FIRST_USER + 1;
+    public static final int RESUL_REMOVE_NOTE = RESULT_FIRST_USER + 1;
 
     private RecyclerView mRecyclerView;
     private NotesAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Note> myDataset;
     private FloatingActionButton addNoteButton;
-
+    private DatabaseHandler dbHandler;
     private ProgressBar loading;
-    String title = getResources().getString(R.string.titolo_dialog);
+    //String title = getResources().getString(R.string.titolo_dialog);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.notes_rv);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+
         mRecyclerView.setHasFixedSize(true);
+
         addNoteButton = (FloatingActionButton) findViewById(R.id.add_note_fab);
         loading = (ProgressBar) findViewById(R.id.loading);
 
@@ -59,15 +64,20 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         myDataset = new ArrayList<>();
-        Note pinPalazzo = new Note("pin", "234");
+        /*Note pinPalazzo = new Note("pin", "234");
         myDataset.add(pinPalazzo);
 
         myDataset = new ArrayList<>();
         Note spesa = new Note("nota", "fai la spesa");
-        myDataset.add(spesa);
+        myDataset.add(spesa);*/
 
-        mAdapter = new NotesAdapter(myDataset,this);
+        mAdapter = new NotesAdapter(myDataset, this);
         mRecyclerView.setAdapter(mAdapter);
+
+        myDataset = new ArrayList<>();
+        dbHandler = new DatabaseHandler(this);
+        myDataset.addAll(dbHandler.getAllNotes());
+
 
         addNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Note note = new Note(insertedTitle, insertedDescription);
                         mAdapter.addNote(note);
+                        dbHandler.addNote(note);
 
                     }
                 });
@@ -124,12 +135,19 @@ public class MainActivity extends AppCompatActivity {
                 //getPosition from returnIntent
                 int editedNotePosition = data.getIntExtra("position", -1);
 
+                dbHandler.updateNote(editedNotePosition);
+                    data.getStringExtra("title");
+                    data.getStringExtra("description");
+
                 mAdapter.updateNote(editedNotePosition,
                         data.getStringExtra("title"),
                         data.getStringExtra("description"));
 
-                if (resultCode == RESULT_REMOVE_NOTE) {
+
+
+                if (resultCode == RESUL_REMOVE_NOTE) {
                     editedNotePosition = data.getIntExtra("position", -1);
+                    dbHandler.deleteNote(mAdapter.getNote(editedNotePosition));
                     mAdapter.removeNote(editedNotePosition);
 
 
@@ -146,56 +164,58 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
+                }
             }
         }
-    }}
+    }
 
-        private void getNotesFromURL() {
+    private void getNotesFromURL() {
 
-            //Make HTTP call
+        //Make HTTP call
 
-            // Instantiate the RequestQueue.
-            RequestQueue queue = Volley.newRequestQueue(this);
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
 
-            //String url = "http://5af1bf8530f9490014ead894.mockapi.io/api/v1/notes";
-            String url = "http://www.mocky.io/v2/5af4468d55000062007a5239";
+        //String url = "http://5af1bf8530f9490014ead894.mockapi.io/api/v1/notes";
+        String url = "http://www.mocky.io/v2/5af4468d55000062007a5239";
 
-            // Request a string response from the provided URL.
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(
-                    Request.Method.GET, // METHOD
-                    url, // URL
-                    null, // Body parameters
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            // TODO manage success
+        // Request a string response from the provided URL.
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                Request.Method.GET, // METHOD
+                url, // URL
+                null, // Body parameters
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // TODO manage success
 
-                            loading.setVisibility(View.GONE);
-                            Log.d("jsonRequest", response.toString());
-                            ArrayList<Note> noteListFromResponse = Note.getNotesList (response);
-                            mAdapter.addNotesList(noteListFromResponse);
-                        }
+                        loading.setVisibility(View.GONE);
+                        Log.d("jsonRequest", response.toString());
+                        ArrayList<Note> noteListFromResponse = Note.getNotesList(response);
+                        mAdapter.addNotesList(noteListFromResponse);
+                    }
 
-                    },
+                },
 
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-                            loading.setVisibility(View.GONE);
-                            error.printStackTrace();
+                        loading.setVisibility(View.GONE);
+                        error.printStackTrace();
 
-                            Toast.makeText(MainActivity.this,
-                                    "Si è riscontrato un errore " + error.networkResponse.statusCode,
-                                    Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,
+                                "Si è riscontrato un errore " + error.networkResponse.statusCode,
+                                Toast.LENGTH_LONG).show();
 
-                        }
-                    });
+                    }
+                });
 
-            // Add the request to the RequestQueue.
-            queue.add(jsonRequest);
+        // Add the request to the RequestQueue.
+        queue.add(jsonRequest);
 
-        }
+    }
+
 }
 
 
