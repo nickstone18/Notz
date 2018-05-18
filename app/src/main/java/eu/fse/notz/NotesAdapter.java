@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class NotesAdapter extends RecyclerView.Adapter {
 
 
 
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -29,12 +31,14 @@ public class NotesAdapter extends RecyclerView.Adapter {
         // each data item is just a string in this case
         public TextView titleTv;
         public TextView descriptionTv;
+        public ImageView favouriteBtn;
 
 
         public ViewHolder(final View itemView) {
             super(itemView);
             titleTv = (TextView) itemView.findViewById(R.id.title_tv);
             descriptionTv = (TextView) itemView.findViewById(R.id.description_tv);
+            favouriteBtn = (ImageView) itemView.findViewById(R.id.favourite_btn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,6 +131,8 @@ public class NotesAdapter extends RecyclerView.Adapter {
         // Data binding
         noteVH.titleTv.setText(currentNote.getTitle());
         noteVH.descriptionTv.setText(currentNote.getDescription());
+        if (currentNote.isShownOnTop()).noteVH.favouriteBtn.setVisibility(View.VISIBLE);
+
     }
 
     @Override

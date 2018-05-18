@@ -135,13 +135,11 @@ public class MainActivity extends AppCompatActivity {
                 //getPosition from returnIntent
                 int editedNotePosition = data.getIntExtra("position", -1);
 
-                dbHandler.updateNote(editedNotePosition);
-                    data.getStringExtra("title");
-                    data.getStringExtra("description");
-
                 mAdapter.updateNote(editedNotePosition,
                         data.getStringExtra("title"),
                         data.getStringExtra("description"));
+                        //data.getBooleanExtra("favourite" ,Boolean.parseBoolean("false"));
+                dbHandler.updateNote(mAdapter.getNote(editedNotePosition));
 
 
 

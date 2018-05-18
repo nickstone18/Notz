@@ -21,4 +21,12 @@
         android:layout_marginBottom="16dp"
         android:textSize="14dp"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="right"
+        android:id="@+id/favourite"
+        android:src="@drawable/baseline_star_border_black_18"/>
+
 </LinearLayout>

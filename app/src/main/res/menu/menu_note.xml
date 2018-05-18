@@ -8,5 +8,5 @@
         android:title="ciao" />
 
     <item android:id="@+id/settings"
-        android:title="impostazioni" />
+        android:title="settings" />
 </menu>

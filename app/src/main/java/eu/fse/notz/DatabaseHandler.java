@@ -100,7 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Updating single note
-    public int updateNote(int note) {
+    public int updateNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

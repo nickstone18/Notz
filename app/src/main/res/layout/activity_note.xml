@@ -14,6 +14,13 @@
         android:layout_height="wrap_content"
         android:id= "@+id/descriptionEt"/>
 
+    <CheckBox
+        android:id="@+id/favouriteCb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:text="Add to favourites" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,5 +34,6 @@
         android:text="@string/delete"
         android:id="@+id/delete"
         android:layout_gravity="end"/>
+
 
 </LinearLayout>
