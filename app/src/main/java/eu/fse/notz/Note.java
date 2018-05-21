@@ -1,13 +1,5 @@
 package eu.fse.notz;
 
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 /**
  * Created by Amministratore on 12/04/2018.
  */
@@ -102,7 +94,7 @@ public class Note {
     }
 
 
-    public static ArrayList<Note> getNotesList(JSONArray notes) {
+    /*public static ArrayList<Note> getNotesList(JSONArray notes) {
         ArrayList<Note> list = new ArrayList<>();
 
         for (int i = 0; i < notes.length(); i++) {
@@ -130,7 +122,7 @@ public class Note {
             Log.e("Note", e.getMessage());
         }
 
-    }
+    }*/
 
 
 }

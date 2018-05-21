@@ -23,7 +23,7 @@ public class NoteActivity extends AppCompatActivity {
 
     Button editConfirmBtn, deleteButton;
 
-    String title,description;
+    String title, description;
 
     CheckBox favouriteCb;
 
@@ -60,12 +60,12 @@ public class NoteActivity extends AppCompatActivity {
 
                 int position = intent.getIntExtra("position", -1);
 
-                if (favouriteCb.isChecked()) intent.putExtra("favourite", "true");
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("title", editedTitle);
                 returnIntent.putExtra("description", editedDescription);
                 returnIntent.putExtra("position", position);
+                if (favouriteCb.isChecked()) intent.putExtra("favourite", true);
                 setResult(Activity.RESULT_OK, returnIntent);
 
 

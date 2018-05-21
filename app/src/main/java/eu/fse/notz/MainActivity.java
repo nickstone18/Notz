@@ -9,21 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -43,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Note> myDataset;
     private FloatingActionButton addNoteButton;
     private DatabaseHandler dbHandler;
-    private ProgressBar loading;
+    //private ProgressBar loading;
     //String title = getResources().getString(R.string.titolo_dialog);
 
     @Override
@@ -58,25 +46,27 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
         addNoteButton = (FloatingActionButton) findViewById(R.id.add_note_fab);
-        loading = (ProgressBar) findViewById(R.id.loading);
+        //loading = (ProgressBar) findViewById(R.id.loading);
 
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        myDataset = new ArrayList<>();
-        /*Note pinPalazzo = new Note("pin", "234");
+
+        /* myDataset = new ArrayList<>();
+        Note pinPalazzo = new Note("pin", "234");
         myDataset.add(pinPalazzo);
 
         myDataset = new ArrayList<>();
         Note spesa = new Note("nota", "fai la spesa");
         myDataset.add(spesa);*/
 
-        mAdapter = new NotesAdapter(myDataset, this);
-        mRecyclerView.setAdapter(mAdapter);
 
         myDataset = new ArrayList<>();
         dbHandler = new DatabaseHandler(this);
         myDataset.addAll(dbHandler.getAllNotes());
+
+        mAdapter = new NotesAdapter(myDataset, this);
+        mRecyclerView.setAdapter(mAdapter);
 
 
         addNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -85,43 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 showDialog();
             }
         });
-    }
-
-    private void showDialog() {
-
-        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        final View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_note, null);
-
-        alertBuilder.setView(dialogView);
-        alertBuilder.setTitle(R.string.dialog_add_note_title);
-
-        final EditText titleEt = (EditText) dialogView.findViewById(R.id.dialog_title_et);
-        final EditText descriptionEt = (EditText) dialogView.findViewById(R.id.dialog_description_et);
-
-        alertBuilder.setPositiveButton(R.string.dialog_positive_button,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //
-
-                        String insertedTitle = titleEt.getText().toString();
-                        String insertedDescription = descriptionEt.getText().toString();
-
-                        Note note = new Note(insertedTitle, insertedDescription);
-                        mAdapter.addNote(note);
-                        dbHandler.addNote(note);
-
-                    }
-                });
-
-        alertBuilder.setNegativeButton(R.string.dialog_negative_button,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-
-        alertBuilder.show();
     }
 
     @Override
@@ -137,37 +90,86 @@ public class MainActivity extends AppCompatActivity {
 
                 mAdapter.updateNote(editedNotePosition,
                         data.getStringExtra("title"),
-                        data.getStringExtra("description"));
-                        //data.getBooleanExtra("favourite" ,Boolean.parseBoolean("false"));
+                        data.getStringExtra("description"),
+                        data.getBooleanExtra("favourite",false));
+
                 dbHandler.updateNote(mAdapter.getNote(editedNotePosition));
 
 
-
-                if (resultCode == RESUL_REMOVE_NOTE) {
-                    editedNotePosition = data.getIntExtra("position", -1);
-                    dbHandler.deleteNote(mAdapter.getNote(editedNotePosition));
-                    mAdapter.removeNote(editedNotePosition);
-
-
-                    final int finalEditedNotePosition = editedNotePosition;
-                    Snackbar.make(mRecyclerView, getString(R.string.delete), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.delete, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                    Note note = new Note(data.getStringExtra("title"),
-                                            data.getStringExtra("description"));
-
-                                    mAdapter.addNote(finalEditedNotePosition, note);
-                                }
-                            })
-                            .show();
-                }
             }
+
+            if (resultCode == RESUL_REMOVE_NOTE) {
+                final int editedNotePosition = data.getIntExtra("position", -1);
+
+                dbHandler.deleteNote(mAdapter.getNote(editedNotePosition));
+                mAdapter.removeNote(editedNotePosition);
+
+                //final int finalEditedNotePosition = editedNotePosition;
+                Snackbar.make(mRecyclerView, getString(R.string.note_removed), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.cancel, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Note note = new Note(data.getStringExtra("title"),
+                                        data.getStringExtra("description"));
+
+                                mAdapter.addNote(editedNotePosition, note);
+                                dbHandler.addNote(note);
+                            }
+                        })
+                        .show();
+            }
+
+
         }
+
     }
 
-    private void getNotesFromURL() {
+    private void showDialog() {
+
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        final View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_note, null);
+
+
+        final EditText titleEt = (EditText) dialogView.findViewById(R.id.dialog_title_et);
+        final EditText descriptionEt = (EditText) dialogView.findViewById(R.id.dialog_description_et);
+
+        alertBuilder.setView(dialogView)
+                .setTitle(R.string.dialog_add_note_title)
+                .setPositiveButton(R.string.dialog_positive_button,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //
+
+                        String insertedTitle = titleEt.getText().toString();
+                        String insertedDescription = descriptionEt.getText().toString();
+
+                        Note.NoteBuilder noteBuilder = new Note.NoteBuilder();
+                        noteBuilder
+                                .setTitle(insertedTitle)
+                                .setDescription(insertedDescription)
+                                .setId(12)
+                                .setShownOnTop(true);
+
+                        mAdapter.addNote(noteBuilder.build());
+                        dbHandler.addNote(noteBuilder.build());
+
+                    }
+                });
+
+        alertBuilder.setNegativeButton(R.string.dialog_negative_button,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+
+                alertBuilder.create()
+                .show();
+    }
+
+    /*private void getNotesFromURL() {
 
         //Make HTTP call
 
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(jsonRequest);
 
-    }
+    }*/
 
 }
 

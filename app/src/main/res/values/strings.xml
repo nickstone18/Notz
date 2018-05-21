@@ -7,4 +7,6 @@
     <string name="delete">delete</string>
     <string name="titolo_dialog">Title</string>
     <string name="descrizione_dialog">Description</string>
+    <string name="note_removed">remove</string>
+    <string name="cancel">cancel</string>
 </resources>
